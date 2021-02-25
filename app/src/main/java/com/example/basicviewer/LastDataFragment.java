@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -106,6 +107,7 @@ public class LastDataFragment extends Fragment {
         setGraph(graphAcce);
         setGraph(graphAcce);
         setGraph(graphSuhu);
+        graphSuhu.getViewport().setMinY(20);
 
         setLoggedInUser();
         return root;
@@ -121,7 +123,7 @@ public class LastDataFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        FloatingActionButton fab = root.findViewById(R.id.refreshButton);
+        Button fab = root.findViewById(R.id.refreshButton);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

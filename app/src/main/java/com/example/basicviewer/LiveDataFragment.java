@@ -183,6 +183,7 @@ public class LiveDataFragment extends Fragment {
         graphSuhu = (GraphView) root.findViewById(R.id.graphLiveSuhu);
         seriesSuhu = new LineGraphSeries<DataPoint>();
         setGraph(graphSuhu, seriesSuhu, Color.LTGRAY);
+        graphSuhu.getViewport().setMinY(20);
 //        textView = root.findViewById(R.id.textFragment);
 
 
