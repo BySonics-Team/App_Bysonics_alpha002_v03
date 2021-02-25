@@ -68,7 +68,7 @@ public interface RetrofitInterface {
     Call<String> getRompiStat(@Query("rompiID") String id_rompi);
 
     @GET("/sensor/disconnect/ID")
-    Call<String> getDisconnectRompi(@Query("rompiID") String id_rompi,
+    Call<MessageResponse> getDisconnectRompi(@Query("rompiID") String id_rompi,
                                     @Query("pasienID") String id_pasien);
 
 }

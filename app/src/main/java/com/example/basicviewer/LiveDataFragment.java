@@ -183,7 +183,6 @@ public class LiveDataFragment extends Fragment {
         graphSuhu = (GraphView) root.findViewById(R.id.graphLiveSuhu);
         seriesSuhu = new LineGraphSeries<DataPoint>();
         setGraph(graphSuhu, seriesSuhu, Color.LTGRAY);
-        graphSuhu.getViewport().setMinY(20);
 //        textView = root.findViewById(R.id.textFragment);
 
 
@@ -328,28 +327,32 @@ public class LiveDataFragment extends Fragment {
                             if(samePackage <= 100){
                                 dataAllSensor = handleGetRekonstruksiDialog();
                                 Thread.sleep(3000);
-                                if (parseTime(dataAllSensor.getCreatedAt())){
-                                    currPack_id = dataAllSensor.get_id();
-                                    if (currPack_id.equals(lastPack_id) || currPack_id.equals("000000") || !(parseTime(dataAllSensor.getCreatedAt()))){
-                                        Log.i("IDComp Duplicate package", "Same");
-                                        samePackage++;
-                                    }else{
-                                        samePackage = 0;
-                                        //Thread.sleep(2000);
-                                        addDataTray();
-                                        //dataTray = new Integer[packCount][dataRekonstruksi.length];
-                                        packCount++;
-                                        Log.i("packCount:", Integer.toString(packCount));
-                                        lastPack_id = currPack_id;
-                                        if (!graphStart /*&& packCount==4*/){
-                                            graphStart = true;
-                                            lastX =0;
-                                            i = 0;
-                                            Log.i("graph start", "run: graph start");
-                                            //setOnRecord(record);
-                                            onRecord();
+                                try {
+                                    if (parseTime(dataAllSensor.getCreatedAt())) {
+                                        currPack_id = dataAllSensor.get_id();
+                                        if (currPack_id.equals(lastPack_id) || currPack_id.equals("000000") || !(parseTime(dataAllSensor.getCreatedAt()))) {
+                                            Log.i("IDComp Duplicate package", "Same");
+                                            samePackage++;
+                                        } else {
+                                            samePackage = 0;
+                                            //Thread.sleep(2000);
+                                            addDataTray();
+                                            //dataTray = new Integer[packCount][dataRekonstruksi.length];
+                                            packCount++;
+                                            Log.i("packCount:", Integer.toString(packCount));
+                                            lastPack_id = currPack_id;
+                                            if (!graphStart /*&& packCount==4*/) {
+                                                graphStart = true;
+                                                lastX = 0;
+                                                i = 0;
+                                                Log.i("graph start", "run: graph start");
+                                                //setOnRecord(record);
+                                                onRecord();
+                                            }
                                         }
                                     }
+                                }catch(Exception e){
+                                    //manage error data kosong
                                 }
                             }else{
                                 handleEndRecord();
@@ -429,7 +432,7 @@ public class LiveDataFragment extends Fragment {
                             result.getMessage(),
                             Toast.LENGTH_SHORT).show();
                     record = false;
-                    //
+
                     //nanti auto nutup dan buka
                     //handleLoginDialog();
                 }else if(response.code() == 400){
@@ -494,11 +497,15 @@ public class LiveDataFragment extends Fragment {
             @Override
             public void onResponse(Call<Collection<DataAllSensor>> call, Response<Collection<DataAllSensor>> response) {
                 response.code();
-                Collection<DataAllSensor> result = response.body();
+                try {
+                    Collection<DataAllSensor> result = response.body();
 
 
-                DataAllSensor[] dataAllSensorAll = result.toArray(new DataAllSensor[result.size()]);
-                dataAllSensor = dataAllSensorAll[0];
+                    DataAllSensor[] dataAllSensorAll = result.toArray(new DataAllSensor[result.size()]);
+                    dataAllSensor = dataAllSensorAll[0];
+                }catch (Exception e){
+
+                }
                 //dataRekonstruksi = dataAllSensor[0].getdataAllSensor().toArray(new Integer[dataAllSensor[0].getdataAllSensor().size()]);
             }
             @Override

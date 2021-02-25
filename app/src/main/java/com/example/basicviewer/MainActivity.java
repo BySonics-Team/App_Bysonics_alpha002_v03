@@ -318,27 +318,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleDisconnectSensor(final String idSensor) {
 
-        Call<String> call = (Call<String>) retrofitInterface.getDisconnectRompi(idSensor, idUser);
+        Call<MessageResponse> call = (Call<MessageResponse>) retrofitInterface.getDisconnectRompi(idSensor, idUser);
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<MessageResponse>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
                 if (response.code() == 200){
-                    String result = response.body();
+                    MessageResponse result = response.body();
                     Toast.makeText(MainActivity.this,
-                            result,
+                            result.getMessage(),
                             Toast.LENGTH_SHORT).show();
                     setPairedDevice(null);
                 }else if(response.code() == 400){
                     Gson gson = new Gson();
-                    String message = response.errorBody().charStream().toString();
+                    MessageResponse message = gson.fromJson(response.errorBody().charStream(),MessageResponse.class);
                     Toast.makeText(MainActivity.this,
-                            message,
+                            message.getMessage(),
                             Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<MessageResponse> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(),
                         Toast.LENGTH_LONG).show();
             }
@@ -367,9 +367,9 @@ public class MainActivity extends AppCompatActivity {
                     deviceReady = true;
                     Log.i("PAIR", "Device Ready");
                 }else {
-//                    Toast.makeText(MainActivity.this,
-//                            "Rompi not ready. Try again with another ID",
-//                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,
+                            "Rompi not ready. Try again with another ID",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
